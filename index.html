@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ESP32 Data Website</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+  </head>
+  <body>
+    <h2>ESP32 Login</h2>
+    <div id="login-container">
+      <input type="email" id="email" placeholder="Email" />
+      <input type="password" id="password" placeholder="Password" />
+      <button id="login-btn">Login</button>
+      <button id="signup-btn">Sign Up</button>
+    </div>
+
+    <div id="home-container" style="display: none">
+      <h2>Home Page</h2>
+      <p id="temperature-data">Temperature: Loading...</p>
+      <button id="logout-btn">Logout</button>
+    </div>
+
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
+        // TODO: Add SDKs for Firebase products that you want to use
+        // https://firebase.google.com/docs/web/setup#available-libraries
+      
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        const firebaseConfig = {
+          apiKey: "AIzaSyBN__ZIEuKehpGp36zE06LPdpx0G5zxZrE",
+          authDomain: "posturemonitoring-6ab73.firebaseapp.com",
+          databaseURL: "https://posturemonitoring-6ab73-default-rtdb.asia-southeast1.firebasedatabase.app",
+          projectId: "posturemonitoring-6ab73",
+          storageBucket: "posturemonitoring-6ab73.appspot.com",
+          messagingSenderId: "912397497781",
+          appId: "1:912397497781:web:6a7915197e977f087255fc",
+          measurementId: "G-XLDEWTSK8W"
+        };
+      
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+
+        
+      const auth = firebase.auth();
+      const db = firebase.database();
+
+      const loginBtn = document.getElementById("login-btn");
+      const signupBtn = document.getElementById("signup-btn");
+      const logoutBtn = document.getElementById("logout-btn");
+      const loginContainer = document.getElementById("login-container");
+      const homeContainer = document.getElementById("home-container");
+      const temperatureData = document.getElementById("temperature-data");
+
+      // Login function
+      loginBtn.addEventListener("click", () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        auth
+          .signInWithEmailAndPassword(email, password)
+          .then(() => {
+            loginContainer.style.display = "none";
+            homeContainer.style.display = "block";
+            loadTemperature();
+          })
+          .catch((error) => alert(error.message));
+      });
+
+      // Signup function
+      signupBtn.addEventListener("click", () => {
+        const email = document.getElementById("email").value;
+        const password = document.getElementById("password").value;
+        auth
+          .createUserWithEmailAndPassword(email, password)
+          .then(() => {
+            alert("User created successfully! Please log in.");
+          })
+          .catch((error) => alert(error.message));
+      });
+
+      // Logout function
+      logoutBtn.addEventListener("click", () => {
+        auth.signOut().then(() => {
+          loginContainer.style.display = "block";
+          homeContainer.style.display = "none";
+        });
+      });
+
+      // Load temperature data from Firebase
+      function loadTemperature() {
+        const temperatureRef = db.ref("/sensor/temperature");
+        temperatureRef.on("value", (snapshot) => {
+          const temperature = snapshot.val();
+          temperatureData.textContent = "Temperature: " + temperature + "°C";
+        });
+      }
+      </script>
+  </body>
+</html>
