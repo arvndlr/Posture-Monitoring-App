@@ -210,6 +210,19 @@
         text-decoration: underline;
         color: blue;
       }
+      #logoutButton {
+        width: 300px;
+      }
+      .btn-container {
+        display: flex;
+        justify-content: center;
+        width: 50%;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
     </style>
   </head>
   <body>
@@ -297,7 +310,9 @@
         </div>
       </div>
       <!-- Logout Button -->
-      <button id="logoutButton" style="margin-top: 20px">Logout</button>
+      <div class="btn-container">
+        <button id="logoutButton" style="margin-top: 20px">Logout</button>
+      </div>
     </div>
 
     <!-- the scripts for products you want to access must be added-->
