@@ -284,7 +284,7 @@
     </div>
 
     <div id="main-content" style="display: none">
-      <div class="data-head">DHT Sensor Realtime Readings</div>
+      <div class="data-head">Posture Monitoring App</div>
 
       <div class="data-container">
         <div class="data-item">
@@ -296,6 +296,8 @@
           <p class="value" id="humidity">10%</p>
         </div>
       </div>
+      <!-- Logout Button -->
+      <button id="logoutButton" style="margin-top: 20px">Logout</button>
     </div>
 
     <!-- the scripts for products you want to access must be added-->
@@ -338,6 +340,18 @@
       const auth = firebase.auth();
       const database = firebase.database();
 
+      const mainContent = document.getElementById("main-content");
+
+      // Check the user's sign-in state on load
+      window.addEventListener("load", () => {
+        if (localStorage.getItem("user")) {
+          signInForm.style.display = "none";
+          mainContent.style.display = "block";
+        } else {
+          signInForm.style.display = "block";
+          mainContent.style.display = "none";
+        }
+      });
       //getting reference to the data we want
       var dataRef1 = database.ref("test/a");
       var dataRef2 = database.ref("test/b");
@@ -378,8 +392,9 @@
               });
 
               alert("User registered successfully!");
-              signUpForm.style.display = "none";
-              signInForm.style.display = "block";
+              localStorage.setItem("user", userCredential.user.uid);
+              signInForm.style.display = "none";
+              mainContent.style.display = "block";
             })
             .catch((error) => {
               const errorMessage = error.message;
@@ -403,8 +418,9 @@
               const user = userCredential.user;
 
               alert("Signed in successfully!");
-              document.getElementById("main-content").style.display = "block";
+              localStorage.setItem("user", userCredential.user.uid);
               signInForm.style.display = "none";
+              mainContent.style.display = "block";
             })
             .catch((error) => {
               const errorMessage = error.message;
@@ -412,6 +428,22 @@
             });
         });
 
+      // Logout function
+      document
+        .getElementById("logoutButton")
+        .addEventListener("click", function () {
+          auth
+            .signOut()
+            .then(() => {
+              alert("You have been logged out successfully.");
+              localStorage.removeItem("user");
+              mainContent.style.display = "none";
+              signInForm.style.display = "block";
+            })
+            .catch((error) => {
+              alert("Error: " + error.message);
+            });
+        });
       /*signup & login btn clicked*/
       const signUpButton = document.getElementById("signUpButton");
       const signInButton = document.getElementById("signInButton");
