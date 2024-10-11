@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>DHT Readings</title>
+    <title>Posture Monitoring App</title>
     <style type="text/css">
       body {
         background-color: #f5f5f5;
@@ -50,33 +50,273 @@
         box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
         border-radius: 20px;
       }
+
+      .auth-container {
+        width: 300px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+        text-align: center;
+      }
+
+      input {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        box-sizing: border-box;
+      }
+
+      button {
+        padding: 10px;
+        width: 100%;
+        background-color: #6eb7ff;
+        border: none;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background-color: #5aa6e0;
+      }
+
+      /*sigin & signup styling*/
+      .container {
+        background: #fff;
+        width: 450px;
+        padding: 1.5rem;
+        margin: 50px auto;
+        border-radius: 10px;
+        box-shadow: 0 20px 35px rgba(0, 0, 1, 0.9);
+      }
+      form {
+        margin: 0 2rem;
+      }
+      .form-title {
+        font-size: 1.5rem;
+        font-weight: bold;
+        text-align: center;
+        padding: 1.3rem;
+        margin-bottom: 0.4rem;
+      }
+      input {
+        color: inherit;
+        width: 100%;
+        background-color: transparent;
+        border: none;
+        border-bottom: 1px solid #757575;
+        padding-left: 1.5rem;
+        font-size: 15px;
+      }
+      .input-group {
+        padding: 1% 0;
+        position: relative;
+      }
+      .input-group i {
+        position: absolute;
+        color: black;
+      }
+      input:focus {
+        background-color: transparent;
+        outline: transparent;
+        border-bottom: 2px solid hsl(327, 90%, 28%);
+      }
+      input::placeholder {
+        color: transparent;
+      }
+      label {
+        color: #757575;
+        position: relative;
+        left: 1.2em;
+        top: -4em;
+        cursor: auto;
+        transition: 0.3s ease all;
+      }
+      input:focus ~ label,
+      input:not(:placeholder-shown) ~ label {
+        top: -4em;
+        color: hsl(327, 90%, 28%);
+        font-size: 15px;
+      }
+      .recover {
+        text-align: right;
+        font-size: 1rem;
+        margin-bottom: 1rem;
+      }
+      .recover a {
+        text-decoration: none;
+        color: rgb(125, 125, 235);
+      }
+      .recover a:hover {
+        color: blue;
+        text-decoration: underline;
+      }
+      button {
+        font-size: 1.1rem;
+        padding: 8px 0;
+        border-radius: 5px;
+        outline: none;
+        border: none;
+        width: 100%;
+        background: rgb(125, 125, 235);
+        color: white;
+        cursor: pointer;
+        transition: 0.9s;
+      }
+      button:hover {
+        background: #07001f;
+      }
+      .or {
+        font-size: 1.1rem;
+        margin-top: 0.5rem;
+        text-align: center;
+      }
+      .icons {
+        text-align: center;
+      }
+      .icons i {
+        color: rgb(125, 125, 235);
+        padding: 0.8rem 1.5rem;
+        border-radius: 10px;
+        font-size: 1.5rem;
+        cursor: pointer;
+        border: 2px solid #dfe9f5;
+        margin: 0 15px;
+        transition: 1s;
+      }
+      .icons i:hover {
+        background: #07001f;
+        font-size: 1.6rem;
+        border: 2px solid rgb(125, 125, 235);
+      }
+      .links {
+        display: flex;
+        justify-content: space-around;
+        padding: 0 4rem;
+        margin-top: 0.9rem;
+        font-weight: bold;
+      }
+      #signUpButton,
+      #signInButton {
+        color: rgb(125, 125, 235);
+        border: none;
+        background-color: transparent;
+        font-size: 1rem;
+        font-weight: bold;
+      }
+      #signUpButton:hover,
+      #signInButton:hover {
+        text-decoration: underline;
+        color: blue;
+      }
     </style>
   </head>
   <body>
-    <div class="data-head">Posture Monitoring App</div>
-
-    <div class="data-container">
-      <div class="data-item">
-        <h2>Temperature</h2>
-        <p class="value" id="temperature">22 &#8451;</p>
+    <div class="container" id="signup" style="display: none">
+      <h1 class="form-title">Register</h1>
+      <form method="post" action="">
+        <div id="signUpMessage" class="messageDiv" style="display: none"></div>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="fName" placeholder="First Name" required />
+          <label for="fname">First Name</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-user"></i>
+          <input type="text" id="lName" placeholder="Last Name" required />
+          <label for="lName">Last Name</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="rEmail" placeholder="Email" required />
+          <label for="rEmail">Email</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="rPassword"
+            placeholder="Password"
+            required
+          />
+          <label for="rPassword">Password</label>
+        </div>
+        <button class="btn" id="submitSignUp">Sign Up</button>
+      </form>
+      <p class="or">----------or--------</p>
+      <div class="links">
+        <p>Already Have Account ?</p>
+        <button id="signInButton">Sign In</button>
       </div>
-      <div class="data-item">
-        <h2>Humidity</h2>
-        <p class="value" id="humidity">10%</p>
+    </div>
+
+    <div class="container" id="signIn">
+      <h1 class="form-title">Sign In</h1>
+      <form method="post" action="">
+        <div id="signInMessage" class="messageDiv" style="display: none"></div>
+
+        <div class="input-group">
+          <i class="fas fa-envelope"></i>
+          <input type="email" id="email" placeholder="Email" required />
+          <label for="email">Email</label>
+        </div>
+        <div class="input-group">
+          <i class="fas fa-lock"></i>
+          <input
+            type="password"
+            id="password"
+            placeholder="Password"
+            required
+          />
+          <label for="password">Password</label>
+        </div>
+        <p class="recover">
+          <a href="#">Recover Password</a>
+        </p>
+        <button class="btn" id="submitSignIn">Sign In</button>
+      </form>
+      <p class="or">----------or--------</p>
+      <div class="links">
+        <p>Don't have account yet?</p>
+        <button id="signUpButton">Sign Up</button>
+      </div>
+    </div>
+
+    <div id="main-content" style="display: none">
+      <div class="data-head">DHT Sensor Realtime Readings</div>
+
+      <div class="data-container">
+        <div class="data-item">
+          <h2>Temperature</h2>
+          <p class="value" id="temperature">22 &#8451;</p>
+        </div>
+        <div class="data-item">
+          <h2>Humidity</h2>
+          <p class="value" id="humidity">10%</p>
+        </div>
       </div>
     </div>
 
     <!-- the scripts for products you want to access must be added-->
 
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
-
     <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-auth.js"></script>
 
     <script type="module">
       // Import the functions you need from the SDKs you need
       import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
-      // TODO: Add SDKs for Firebase products that you want to use
-      // https://firebase.google.com/docs/web/setup#available-libraries
+      import {
+        getAuth,
+        createUserWithEmailAndPassword,
+        signInWithEmailAndPassword,
+      } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-auth.js";
+      import {
+        getDatabase,
+        ref,
+        set,
+      } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-database.js";
 
       // Your web app's Firebase configuration here (Do not use the existing configuration)
       const firebaseConfig = {
@@ -95,7 +335,8 @@
       firebase.initializeApp(firebaseConfig);
 
       // getting reference to the database
-      var database = firebase.database();
+      const auth = firebase.auth();
+      const database = firebase.database();
 
       //getting reference to the data we want
       var dataRef1 = database.ref("test/a");
@@ -110,6 +351,80 @@
       dataRef2.on("value", function (getdata2) {
         var temp = getdata2.val();
         document.getElementById("temperature").innerHTML = temp + "&#8451;";
+      });
+
+      // Sign up function
+      document
+        .getElementById("submitSignUp")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const fName = document.getElementById("fName").value;
+          const lName = document.getElementById("lName").value;
+          const email = document.getElementById("rEmail").value;
+          const password = document.getElementById("rPassword").value;
+
+          // Create user with Firebase Authentication
+          auth
+            .createUserWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+
+              // Store user details in Realtime Database
+              set(ref(database, "users/" + user.uid), {
+                firstName: fName,
+                lastName: lName,
+                email: email,
+              });
+
+              alert("User registered successfully!");
+              signUpForm.style.display = "none";
+              signInForm.style.display = "block";
+            })
+            .catch((error) => {
+              const errorMessage = error.message;
+              alert("Error: " + errorMessage);
+            });
+        });
+
+      // Sign in function
+      document
+        .getElementById("submitSignIn")
+        .addEventListener("click", function (e) {
+          e.preventDefault();
+
+          const email = document.getElementById("email").value;
+          const password = document.getElementById("password").value;
+
+          // Sign in with Firebase Authentication
+          auth
+            .signInWithEmailAndPassword(email, password)
+            .then((userCredential) => {
+              const user = userCredential.user;
+
+              alert("Signed in successfully!");
+              document.getElementById("main-content").style.display = "block";
+              signInForm.style.display = "none";
+            })
+            .catch((error) => {
+              const errorMessage = error.message;
+              alert("Error: " + errorMessage);
+            });
+        });
+
+      /*signup & login btn clicked*/
+      const signUpButton = document.getElementById("signUpButton");
+      const signInButton = document.getElementById("signInButton");
+      const signInForm = document.getElementById("signIn");
+      const signUpForm = document.getElementById("signup");
+
+      signUpButton.addEventListener("click", function () {
+        signInForm.style.display = "none";
+        signUpForm.style.display = "block";
+      });
+      signInButton.addEventListener("click", function () {
+        signInForm.style.display = "block";
+        signUpForm.style.display = "none";
       });
     </script>
   </body>
