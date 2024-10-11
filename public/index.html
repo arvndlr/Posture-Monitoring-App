@@ -1,105 +1,116 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Posture Monitoring App</title>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database.js"></script>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>DHT Readings</title>
+    <style type="text/css">
+      body {
+        background-color: #f5f5f5;
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+      }
+      .data-container {
+        display: flex;
+        justify-content: space-between;
+        width: 50%;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 10px;
+      }
+
+      .data-item {
+        text-align: center;
+      }
+
+      .data-item h2 {
+        font-size: 24px;
+        font-weight: bold;
+        margin-bottom: 10px;
+      }
+
+      .data-item p {
+        font-size: 48px;
+        font-weight: bold;
+        color: #6eb7ff;
+      }
+
+      .data-head {
+        margin: auto;
+        width: 50%;
+        text-align: center;
+        font-size: 45px;
+        font-weight: bold;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: #fff;
+        box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
+        border-radius: 20px;
+      }
+    </style>
   </head>
   <body>
-    <h2>Posture Monitoring App</h2>
-    <div id="login-container">
-      <input type="email" id="email" placeholder="Email" />
-      <input type="password" id="password" placeholder="Password" />
-      <button id="login-btn">Login</button>
-      <button id="signup-btn">Sign Up</button>
+    <div class="data-head">Posture Monitoring App</div>
+
+    <div class="data-container">
+      <div class="data-item">
+        <h2>Temperature</h2>
+        <p class="value" id="temperature">22 &#8451;</p>
+      </div>
+      <div class="data-item">
+        <h2>Humidity</h2>
+        <p class="value" id="humidity">10%</p>
+      </div>
     </div>
 
-    <div id="home-container" style="display: none">
-      <h2>Home Page</h2>
-      <p id="temperature-data">Temperature: Loading...</p>
-      <button id="logout-btn">Logout</button>
-    </div>
+    <!-- the scripts for products you want to access must be added-->
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-app.js"></script>
+
+    <script src="https://www.gstatic.com/firebasejs/8.6.8/firebase-database.js"></script>
 
     <script type="module">
-        // Import the functions you need from the SDKs you need
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.14.1/firebase-analytics.js";
-        // TODO: Add SDKs for Firebase products that you want to use
-        // https://firebase.google.com/docs/web/setup#available-libraries
-      
-        // Your web app's Firebase configuration
-        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-        const firebaseConfig = {
-          apiKey: "AIzaSyBN__ZIEuKehpGp36zE06LPdpx0G5zxZrE",
-          authDomain: "posturemonitoring-6ab73.firebaseapp.com",
-          databaseURL: "https://posturemonitoring-6ab73-default-rtdb.asia-southeast1.firebasedatabase.app",
-          projectId: "posturemonitoring-6ab73",
-          storageBucket: "posturemonitoring-6ab73.appspot.com",
-          messagingSenderId: "912397497781",
-          appId: "1:912397497781:web:6a7915197e977f087255fc",
-          measurementId: "G-XLDEWTSK8W"
-        };
-      
-        // Initialize Firebase
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
+      // Import the functions you need from the SDKs you need
+      import { initializeApp } from "https://www.gstatic.com/firebasejs/9.20.0/firebase-app.js";
+      // TODO: Add SDKs for Firebase products that you want to use
+      // https://firebase.google.com/docs/web/setup#available-libraries
 
-        
-      const auth = firebase.auth();
-      const db = firebase.database();
+      // Your web app's Firebase configuration here (Do not use the existing configuration)
+      const firebaseConfig = {
+        apiKey: "AIzaSyBN__ZIEuKehpGp36zE06LPdpx0G5zxZrE",
+        authDomain: "posturemonitoring-6ab73.firebaseapp.com",
+        databaseURL:
+          "https://posturemonitoring-6ab73-default-rtdb.asia-southeast1.firebasedatabase.app",
+        projectId: "posturemonitoring-6ab73",
+        storageBucket: "posturemonitoring-6ab73.appspot.com",
+        messagingSenderId: "912397497781",
+        appId: "1:912397497781:web:6a7915197e977f087255fc",
+        measurementId: "G-XLDEWTSK8W",
+      };
 
-      const loginBtn = document.getElementById("login-btn");
-      const signupBtn = document.getElementById("signup-btn");
-      const logoutBtn = document.getElementById("logout-btn");
-      const loginContainer = document.getElementById("login-container");
-      const homeContainer = document.getElementById("home-container");
-      const temperatureData = document.getElementById("temperature-data");
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
 
-      // Login function
-      loginBtn.addEventListener("click", () => {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        auth
-          .signInWithEmailAndPassword(email, password)
-          .then(() => {
-            loginContainer.style.display = "none";
-            homeContainer.style.display = "block";
-            loadTemperature();
-          })
-          .catch((error) => alert(error.message));
+      // getting reference to the database
+      var database = firebase.database();
+
+      //getting reference to the data we want
+      var dataRef1 = database.ref("test/a");
+      var dataRef2 = database.ref("test/b");
+
+      //fetch the data
+      dataRef1.on("value", function (getdata1) {
+        var humi = getdata1.val();
+        document.getElementById("humidity").innerHTML = humi + "%";
       });
 
-      // Signup function
-      signupBtn.addEventListener("click", () => {
-        const email = document.getElementById("email").value;
-        const password = document.getElementById("password").value;
-        auth
-          .createUserWithEmailAndPassword(email, password)
-          .then(() => {
-            alert("User created successfully! Please log in.");
-          })
-          .catch((error) => alert(error.message));
+      dataRef2.on("value", function (getdata2) {
+        var temp = getdata2.val();
+        document.getElementById("temperature").innerHTML = temp + "&#8451;";
       });
-
-      // Logout function
-      logoutBtn.addEventListener("click", () => {
-        auth.signOut().then(() => {
-          loginContainer.style.display = "block";
-          homeContainer.style.display = "none";
-        });
-      });
-
-      // Load temperature data from Firebase
-      function loadTemperature() {
-        const temperatureRef = db.ref("/sensor/temperature");
-        temperatureRef.on("value", (snapshot) => {
-          const temperature = snapshot.val();
-          temperatureData.textContent = "Temperature: " + temperature + "°C";
-        });
-      }
-      </script>
+    </script>
   </body>
 </html>
